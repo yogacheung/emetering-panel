@@ -24,7 +24,7 @@
                     <b-col cols="6" class="text-right">
                       <b-button variant="link" class="px-0" v-b-modal.modal1>Forgot password?</b-button>                    
                       <!-- Modal Component -->
-                      <b-modal id="modal1" title="Request reset password">
+                      <b-modal id="modal1" centered title="Request reset password" ok-title="Send">
                         <p class="my-4">
                           <b-input-group prepend="Email">
                             <b-form-input></b-form-input>

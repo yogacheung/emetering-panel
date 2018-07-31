@@ -6,13 +6,13 @@
       </b-col>
     </b-row>
     <b-row>             
-      <b-card header="Unit Details" header-tag="header" footer="Powered by IFS | July 2018" footer-tag="footer"> 
+      <b-card header="Unit Details" header-tag="header" footer="Powered by IFS @2018" footer-tag="footer"> 
         <b-row>
           <b-col cols="4">
           </b-col>
           <b-col cols="4">
             <b-card class="text-center">
-              <h1> <b-badge pill variant="success">Online</b-badge> {{punit}}</h1>
+              <h1><b-badge pill variant="success">Online</b-badge> {{punit}}</h1>
             </b-card>
           </b-col>
           <b-col cols="4">

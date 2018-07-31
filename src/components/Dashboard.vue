@@ -6,21 +6,17 @@
     </b-col>
   </b-row>
   <b-row>                
-        <b-card header="eMetering List" header-tag="header" footer="Powered by IFS | July 2018" footer-tag="footer">            
+        <b-card header="eMetering List" header-tag="header" footer="Powered by IFS @2018" footer-tag="footer">            
           <b-row>            
               <b-col cols="4" v-for="item in items" :key="item.index"> 
                 <div class="dash">
                 <b-card>
                   <div class="ebg">
-                    <h4 class="ebg-h4">Unit: {{item.Unit}}</h4>
-                  </div>
-                  
-                    <p class="card-text">
-                        Last Reading:<br> 
-                        {{item.Reading}} kWh<br>
-                        <b-button v-on:click="onDetail(item.Unit)">Details</b-button>                      
-                    </p>                  
-                                
+                    <h3 class="ebg-h3">Unit: {{item.Unit}}</h3>
+                  </div>                    
+                  <h6>Last Reading:</h6>
+                  <h4>{{item.Reading}} kWh</h4>
+                  <b-button v-on:click="onDetail(item.Unit)" variant="success">Details</b-button>                              
                 </b-card>
                 </div>
               </b-col>            
@@ -81,7 +77,7 @@ export default {
   background-size: cover;
   border-radius: 3px;  
 }
-.ebg .ebg-h4 {
+.ebg .ebg-h3 {
   color: white;
   padding-top: 30px;
   padding-bottom: 30px;
@@ -100,6 +96,6 @@ export default {
   margin-left: 5px;  
   margin-right: 5px;  
   text-align: center;
-  background-color: #F2F3F4;
+  background-color: #EBF5FB;
 }
 </style>

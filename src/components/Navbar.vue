@@ -1,6 +1,6 @@
 <template>
+  <div>
     <b-navbar toggleable="md" type="dark" variant="dark">
-
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
     <b-navbar-brand to="dashboard">Home</b-navbar-brand>
@@ -20,7 +20,7 @@
           <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>
 
-        <b-nav-item-dropdown text="Lang" right>
+        <b-nav-item-dropdown text="Lang" right disabled>
           <b-dropdown-item href="#">EN</b-dropdown-item>
           <b-dropdown-item href="#">CH</b-dropdown-item>        
         </b-nav-item-dropdown>
@@ -30,15 +30,26 @@
           <template slot="button-content">
             <em>User</em>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item to="login">Signout</b-dropdown-item>
+          <b-dropdown-item href="#" disabled>Profile</b-dropdown-item>
+          <b-dropdown-item v-b-modal.modalsm>Sign Out</b-dropdown-item>          
         </b-nav-item-dropdown>
       </b-navbar-nav>
 
     </b-collapse>
-  </b-navbar>
-          
+    </b-navbar>   
+    <b-modal id="modalsm" size="sm" title="Sign Out?" hide-footer>    
+      <b-btn class="mt-3" variant="outline-danger" block to="/">Confirm</b-btn>
+    </b-modal>
+  </div> 
 </template>
+
+<script>
+export default {
+  methods: {
+    
+  }
+}
+</script>
 
 <style scoped>
 .navbar {
