@@ -70,7 +70,7 @@ export default {
       // console.log(this.startDate.date.toISOString().slice(0,10));
       // console.log(this.cutoffDate.date.toISOString().slice(0,10));
       //this.$http.get('http://localhost:3000/genreport/2017-11-28/2018-01-20')
-      this.$http.get('http://localhost:3000/genreport/'+this.startDate.date.toISOString().slice(0,10)+'/'+this.cutoffDate.date.toISOString().slice(0,10))
+      this.$http.get('/api/genreport/'+this.startDate.date.toISOString().slice(0,10)+'/'+this.cutoffDate.date.toISOString().slice(0,10))
       .then(function (response) {        
         console.log(response.data[0]);
         if(response.data[0])

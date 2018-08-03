@@ -72,7 +72,7 @@ export default {
     onSubmit () {     
       var self = this;       
       
-      this.$http.post('http://localhost:3000/login',{        
+      this.$http.post('/api/login',{        
           name: this.username,
           password: this.password        
       })

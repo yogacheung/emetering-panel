@@ -111,7 +111,7 @@ export default {
       this.punit = this.$router.currentRoute.query.unit;
       // console.log(this.punit);
 
-      this.$http.get('http://localhost:3000/unitinfo/'+this.punit)
+      this.$http.get('/api/unitinfo/'+this.punit)
       .then(function (response) {        
         // console.log(response.data[0]);
         if(response.data[0])
@@ -121,7 +121,7 @@ export default {
         console.log(error);
       });
 
-      this.$http.get('http://localhost:3000/lastndays/'+this.punit+'/14')
+      this.$http.get('/api/lastndays/'+this.punit+'/14')
       .then(function (response) {        
         // console.log(response.data[0]);
         if(response.data[0]){
