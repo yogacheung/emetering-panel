@@ -24,10 +24,10 @@
                     <b-col cols="6" class="text-right">
                       <b-button variant="link" class="px-0" v-b-modal.modal1>Forgot password?</b-button>                    
                       <!-- Modal Component -->
-                      <b-modal id="modal1" centered title="Request reset password" ok-title="Send">
+                      <b-modal id="modal1" centered title="Request reset password" ok-title="Send" @ok="onReset">
                         <p class="my-4">
                           <b-input-group prepend="Email">
-                            <b-form-input></b-form-input>
+                            <b-form-input v-model="email" @keyup.enter.native="onReset"></b-form-input>
                           </b-input-group>
                         </p>
                       </b-modal>
@@ -63,6 +63,7 @@
 export default {
   data () {
     return {
+      email: '',
       username: '',
       password: '',
       incorrect: false      
@@ -83,8 +84,20 @@ export default {
         else {
           incorrect = true;
           self.password = '';
-        }          
-                    
+        }                              
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    onReset () {
+      var self = this;       
+      // console.log(this.email);
+      this.$http.post('/api/resetpw',{        
+          email: this.email,          
+      })
+      .then(function (response) {        
+        console.log(response.data[0]);        
       })
       .catch(function (error) {
         console.log(error);

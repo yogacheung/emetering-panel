@@ -6,15 +6,15 @@
     </b-col>
   </b-row>
   <b-row>                
-        <b-card header="eMetering List" header-tag="header" footer="Powered by IFS @2018" footer-tag="footer">            
+        <b-card header="eMetering List" header-tag="header" footer="Powered by IFS @2018" footer-tag="footer">                      
           <b-row>            
               <b-col cols="4" v-for="item in items" :key="item.index"> 
-                <div class="dash">
-                <b-card>
+                <div v-cloak class="dash">
+                <b-card border-variant="success">
                   <div class="ebg">
                     <h3 class="ebg-h3">Unit: {{item.Unit}}</h3>
                   </div>                    
-                  <h6>Last Reading:</h6>
+                  <h6>Last Reading : {{item.Datetime}}</h6>
                   <h4>{{item.Reading}} kWh</h4>
                   <b-button v-on:click="onDetail(item.Unit)" variant="success">Details</b-button>                              
                 </b-card>
@@ -34,8 +34,8 @@ export default {
     NavBar  
   },
   data () {
-    return {       
-      items: []     
+    return {        
+      items: [{"Unit":"loading","Reading":0.0,"Datetime":"loading"}]
     }
   },
   mounted () {
@@ -47,9 +47,10 @@ export default {
 
       this.$http.get('/api/currentreading')
       .then(function (response) {        
-        // console.log(response.data[0]);
-        if(response.data[0])
-          self.items = response.data;                  
+        // console.log(response.data[0]);        
+        if(response.data[0]){
+          self.items = response.data;                                  
+        }                    
       })
       .catch(function (error) {
         console.log(error);
