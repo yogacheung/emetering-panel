@@ -138,8 +138,8 @@ export default {
         console.log(error);
       });
 
-      this.$http.get('http://210.3.154.206:8880/api/lastmonth/10A01')
-      //this.$http.get('/api/lastmonth/'+this.punit)      
+      //this.$http.get('http://210.3.154.206:8880/api/lastmonth/10A01')
+      this.$http.get('/api/lastmonth/'+this.punit)      
       .then(function (response) {        
         // console.log(response.data[0]);
         if(response.data[0]){
@@ -181,7 +181,7 @@ export default {
           // console.log(clabels);
           // console.log(cdata);
           // console.log(netdata);
-           console.log(cweek);
+          // console.log(cweek);
 
           // Month data
           self.monthlinedata = {

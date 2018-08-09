@@ -99,7 +99,7 @@ export default {
       }               
       // console.log(startDay); 
       // console.log(cutoffDay);          
-      console.log(url);
+      // console.log(url);
       this.$http.get(url)
       .then(function (response) {        
         //console.log(response.data[0]);
