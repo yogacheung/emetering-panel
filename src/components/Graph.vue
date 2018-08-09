@@ -62,24 +62,24 @@
             </b-card>
           </b-col>
           <b-col cols="4">  
-            <b-card header="Last Week" class="text-center">
+            <b-card header="Last Week Usage" class="text-center">
                 <bar-chart :chart-data="lastweekdata"></bar-chart>
             </b-card>
           </b-col>          
         </b-row>  
         <b-row>
           <b-col cols="4">  
-            <b-card header="First 2 Weeks" class="text-center">
-                <bar-chart :chart-data="f2weeksdata"></bar-chart>
+            <b-card header="Last Month Usage" class="text-center">
+                <bar-chart :chart-data="monthbardata"></bar-chart>
             </b-card>
           </b-col>
           <b-col cols="4">  
-            <b-card header="Last 2 Weeks" class="text-center">
-                <h-bar-chart :chart-data="l2weeksdata"></h-bar-chart>
+            <b-card header="Weekly Comparison" class="text-center">
+                <h-bar-chart :chart-data="weeklybardata"></h-bar-chart>
             </b-card>
           </b-col>
           <b-col cols="4">  
-            <b-card header="Last Week" class="text-center">
+            <b-card header="Last Week Usage Ratio" class="text-center">
                 <doughnut :chart-data="doughnutdata"></doughnut>
             </b-card>
           </b-col>    
@@ -110,16 +110,13 @@ export default {
       punit: '', 
       items: [],
       monthlinedata: null,
+      monthbardata: null,
       weeklylinedata: null,      
       lastweekdata: null,    
+      weeklybardata: null, 
       f2weeksdata: null,      
       l2weeksdata: null, 
-      doughnutdata: null,
-      
-      datacollection: null,
-      linedate: null,
-      dataweekly: null,
-      compare: null
+      doughnutdata: null       
     }
   },
   mounted () {
@@ -141,33 +138,50 @@ export default {
         console.log(error);
       });
 
-      //this.$http.get('/api/lastndays/'+this.punit+'/14')
-      this.$http.get('/api/lastmonth/'+this.punit)      
+      this.$http.get('http://210.3.154.206:8880/api/lastmonth/10A01')
+      //this.$http.get('/api/lastmonth/'+this.punit)      
       .then(function (response) {        
         // console.log(response.data[0]);
         if(response.data[0]){
           var data = response.data;
           var cdata = [];
+          var netdata = [];
           var clabels = [];
           var cweek = [];
 
-          data.forEach(function(item) {
-            clabels.push(item.Date);
-            cdata.push(item.Reading);
-            cweek.push(item.Week);
-          });
+          var w1data = [];
+          var w1labels = [];
+          var w2data = [];
+          var w2labels = [];
+          var w3data = [];
+          var w3labels = [];
+          var w4data = [];
+          var w4labels = [];
+
+          for(var i = 1; i < data.length; i++){
+            //console.log(data[i]);
+            clabels.push(data[i].Date);
+            cdata.push(data[i].Reading);
+            netdata.push(data[i].Reading-data[i-1].Reading);            
+            if(i < 8) {
+              w1data.push(data[i].Reading-data[i-1].Reading);
+              w1labels.push(data[i].Date);
+              cweek.push(data[i].Week);
+            }else if(7 < i && i < 15) {
+              w2data.push(data[i].Reading-data[i-1].Reading);
+              w2labels.push(data[i].Date);
+            }else if(14 < i && i < 22) {
+              w3data.push(data[i].Reading-data[i-1].Reading);
+              w3labels.push(data[i].Date);
+            }else if(21 < i && i < 29) {
+              w4data.push(data[i].Reading-data[i-1].Reading);
+              w4labels.push(data[i].Date);
+            }            
+          }          
           // console.log(clabels);
           // console.log(cdata);
-          // console.log(cweek);
-          var w1data = cdata.slice(0, 6);
-          var w1labels = clabels.slice(0, 6);
-          var w2data = cdata.slice(7, 13);
-          var w2labels = clabels.slice(7, 13);
-          var w3data = cdata.slice(14, 20);
-          var w3labels = clabels.slice(14, 20);
-          var w4data = cdata.slice(21, 27);
-          var w4labels = clabels.slice(21, 27);
-          cweek = cweek.slice(0, 6);
+          // console.log(netdata);
+           console.log(cweek);
 
           // Month data
           self.monthlinedata = {
@@ -181,6 +195,18 @@ export default {
               }
             ]
           }
+
+          self.monthbardata = {
+            labels: clabels,
+            datasets: [
+              {
+                label: 'Reading',
+                backgroundColor: '#5DADE2',
+                data: netdata
+              }
+            ]
+          }
+
           // Weekly Data
           self.weeklylinedata = {
             labels: cweek,
@@ -212,6 +238,31 @@ export default {
             ]
           }
 
+          self.weeklybardata = {
+            labels: cweek,
+            datasets: [
+              {
+                label: 'Week 1',
+                backgroundColor: '#5DADE2',
+                data: w1data
+              },{
+                label: 'Week 2',
+                backgroundColor: '#48C9B0',
+                data: w2data
+              },
+              {
+                label: 'Week 3',
+                backgroundColor: '#FF6384',
+                data: w3data
+              },{
+                label: 'Week 4',
+                backgroundColor: '#FFCE56',
+                data: w4data
+              }
+            ]
+          }
+
+          // Last Week
           self.lastweekdata = {
             labels: w4labels,
             datasets: [
@@ -222,6 +273,26 @@ export default {
               }
             ]
           }
+
+          // Last Week Doughnut
+          self.doughnutdata = {
+            labels: w4labels,
+            datasets: [
+              {
+                label: 'Reading',
+                backgroundColor: [
+                  '#FF6384',
+                  '#36A2EB',
+                  '#FFCE56',
+                  '#00A600',
+                  '#5DADE2',
+                  '#48C9B0',
+                  '#82E0AA'
+                ],             
+                data: w4data
+              }
+            ]
+          }    
 
           self.f2weeksdata = {
             labels: cweek,
@@ -252,24 +323,7 @@ export default {
               }
             ]
           } 
-          self.doughnutdata = {
-            labels: cweek,
-            datasets: [
-              {
-                label: 'Reading',
-                backgroundColor: [
-                  '#FF6384',
-                  '#36A2EB',
-                  '#FFCE56',
-                  '#00A600',
-                  '#5DADE2',
-                  '#48C9B0',
-                  '#82E0AA'
-                ],             
-                data: w4data
-              }
-            ]
-          }    
+
         }          
       })
       .catch(function (error) {

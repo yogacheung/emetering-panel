@@ -10,13 +10,13 @@
             
           <b-row>
             <b-col cols="4">
-              <b-card header="Start Date" class="text-center" bootstrap-styling="true">                
-                <datepicker v-model="startDate.date" :inline="true"></datepicker>            
+              <b-card header="Start Date" class="text-center">                
+                <datepicker v-model="startDate.date" :inline="true" class="my-datepicker" calendar-class="my-datepicker_calendar"></datepicker>            
               </b-card>
             </b-col>
             <b-col cols="4">
-              <b-card header="Cut-Off Date" class="text-center" bootstrap-styling="true">
-                <datepicker v-model="cutoffDate.date" :inline="true"></datepicker>    
+              <b-card header="Cut-Off Date" class="text-center">
+                <datepicker v-model="cutoffDate.date" :inline="true" class="my-datepicker" calendar-class="my-datepicker_calendar"></datepicker>    
               </b-card>    
             </b-col>
             <b-col cols="4">
@@ -31,10 +31,10 @@
             <b-col cols="12">
               <b-card no-body>
                 <b-tabs card>
-                  <b-tab title="Month Cut-Off" active>
+                  <b-tab v-if="selected == 1" title="Month Cut-Off" active>
                     <b-table hover :items="items"></b-table>            
                   </b-tab>
-                  <b-tab title="By Range">
+                  <b-tab v-else-if="selected == 2" title="Day" active>
                     <b-table hover :items="items"></b-table>            
                   </b-tab>
                 </b-tabs>
@@ -58,12 +58,15 @@ export default {
   },
   data () {
     return {
+      showMonth: false,
+      showDay: false,
       selected: 1,
       options: [        
         {value: 1, text: 'Month | By Cut-Off Day'},
-        {value: 2, text: 'By Date Range'}        
+        {value: 2, text: 'Day | By Cut-Off Day'},
+        {value: 3, text: 'By Date Range'}        
       ],
-      items: [],
+      items: [{Result: 'No Record'}],
       cutoffDate: {
         date: new Date()
       },
@@ -81,22 +84,28 @@ export default {
       // console.log(this.cutoffDate.date.toISOString().slice(0,10));
       var startDay = this.startDate.date.toISOString().slice(0,10);
       var cutoffDay = this.cutoffDate.date.toISOString().slice(0,10);        
-      if(this.selected == 1){
+      var url = '/api/';
+      if(this.selected == 1) {
         var m = new Date(cutoffDay);
         m.setMonth(m.getMonth() - 1);
         startDay = m.toISOString().slice(0,10);
+        url += 'onemonthreport/'+startDay+'/'+cutoffDay;
+        this.showMonth = true;
+        this.showDay = false;
+      }else if(this.selected == 2) {
+        url += 'onedayreport/'+cutoffDay;        
+        this.showMonth = false;
+        this.showDay = true;
       }               
       // console.log(startDay); 
-      // console.log(cutoffDay);   
-
-      //this.$http.get('http://localhost:3000/genreport/2017-11-28/2018-01-20')
-      // var url = '/api/genreport/'+startDay+'/'+cutoffDay;
+      // console.log(cutoffDay);          
       console.log(url);
       this.$http.get(url)
       .then(function (response) {        
         //console.log(response.data[0]);
         if(response.data[0])
-          self.items = response.data;                  
+          self.items = response.data;
+        else self.items = [{Result: 'No Record'}];              
       })
       .catch(function (error) {
         console.log(error);
@@ -113,8 +122,8 @@ export default {
 .col-4{
   margin-bottom: 20px;
 }
-.vdp-datepicker__calendar {
-  width: 100%
+.my-datepicker >>> .my-datepicker_calendar {
+  width: 100%;
 }
 .row .card {
   width: 100%;  
