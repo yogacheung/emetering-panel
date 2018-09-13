@@ -167,12 +167,24 @@ export default {
               w1data.push(data[i].Reading-data[i-1].Reading);
               w1labels.push(data[i].Date);
               cweek.push(data[i].Week);
+              if(data.length < 8){
+                w4data.push(data[i].Reading-data[i-1].Reading);
+                w4labels.push(data[i].Date);
+              }
             }else if(7 < i && i < 15) {
               w2data.push(data[i].Reading-data[i-1].Reading);
               w2labels.push(data[i].Date);
+              if(data.length < 15){
+                w4data.push(data[i].Reading-data[i-1].Reading);
+                w4labels.push(data[i].Date);
+              }
             }else if(14 < i && i < 22) {
               w3data.push(data[i].Reading-data[i-1].Reading);
               w3labels.push(data[i].Date);
+              if(data.length < 22){
+                w4data.push(data[i].Reading-data[i-1].Reading);
+                w4labels.push(data[i].Date);
+              }
             }else if(21 < i && i < 29) {
               w4data.push(data[i].Reading-data[i-1].Reading);
               w4labels.push(data[i].Date);

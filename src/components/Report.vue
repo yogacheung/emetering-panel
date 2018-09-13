@@ -37,6 +37,9 @@
                   <b-tab v-else-if="selected == 2" title="Day" active>
                     <b-table hover :items="items"></b-table>            
                   </b-tab>
+                  <b-tab v-else-if="selected == 3" title="Day by Range" active>
+                    <b-table hover :items="items"></b-table>            
+                  </b-tab>
                 </b-tabs>
               </b-card>                      
             </b-col>
@@ -96,6 +99,10 @@ export default {
         url += 'onedayreport/'+cutoffDay;        
         this.showMonth = false;
         this.showDay = true;
+      }else {
+        url += 'rangereport/'+startDay+'/'+cutoffDay;
+        this.showMonth = true;
+        this.showDay = false;
       }               
       // console.log(startDay); 
       // console.log(cutoffDay);          
