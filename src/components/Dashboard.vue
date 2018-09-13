@@ -7,7 +7,10 @@
   </b-row>
   <b-row>                
         <b-card header="eMetering List" header-tag="header" footer="Powered by IFS @2018" footer-tag="footer">                      
-          <b-row>            
+          <b-row v-if="loading">
+            <letter-cube></letter-cube>
+          </b-row>
+          <b-row v-else>            
               <b-col cols="4" v-for="item in items" :key="item.index"> 
                 <div v-cloak class="dash">
                 <b-card border-variant="success">
@@ -28,13 +31,16 @@
 
 <script>
 import NavBar from './Navbar.vue'
+import {LetterCube} from 'vue-loading-spinner'
 export default {
   name: 'dashboard',
   components: {  
-    NavBar  
+    NavBar,
+    LetterCube
   },
   data () {
-    return {        
+    return {    
+      loading: false,    
       items: [{"Unit":"loading","Reading":0.0,"Datetime":"loading"}]
     }
   },
@@ -44,15 +50,17 @@ export default {
   methods: {
     onLoad () {
       var self = this;    
-
+      this.loading = true;
       this.$http.get('/api/currentreading')
       .then(function (response) {        
-        // console.log(response.data[0]);        
+        // console.log(response.data[0]);                
         if(response.data[0]){
-          self.items = response.data;                                  
+          self.items = response.data; 
+          self.loading = false;                                 
         }                    
       })
       .catch(function (error) {
+        self.loading = false;
         console.log(error);
       });
     },

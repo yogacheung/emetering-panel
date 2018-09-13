@@ -19,8 +19,8 @@
                   </b-input-group>                  
                   <b-row>
                     <b-col cols="6">
-                      <b-button variant="primary" class="px-4" v-on:click="onSubmit">Login</b-button>
-                    </b-col>
+                      <b-button variant="primary" class="px-4" v-on:click="onSubmit">Login</b-button>                      
+                    </b-col>                    
                     <b-col cols="6" class="text-right">
                       <b-button variant="link" class="px-0" v-b-modal.modal1>Forgot password?</b-button>                    
                       <!-- Modal Component -->
@@ -32,7 +32,7 @@
                         </p>
                       </b-modal>
                     </b-col>
-                  </b-row>
+                  </b-row>                  
                 </b-form>
               </b-card-body>
             </b-card>
@@ -47,46 +47,59 @@
                     <b-card bg-variant="dark">
                       Email : fun@invisiblefun.com
                     </b-card>
-                  </b-collapse>
-                  
-                </div>
-              </b-card-body>
+                  </b-collapse>                               
+                </div>      
+                <b-row v-if="loading">
+                  <b-col cols="5"></b-col>
+                  <letter-cube></letter-cube>   
+                </b-row>          
+              </b-card-body>              
             </b-card>
           </b-card-group>
-        </b-col>
-      </b-row>
+        </b-col>        
+      </b-row>      
     </div>
   </div>
 </template>
 
 <script>
+import {LetterCube} from 'vue-loading-spinner'
 export default {
+  components: {
+    LetterCube
+  },
   data () {
     return {
       email: '',
       username: '',
       password: '',
-      incorrect: false      
+      incorrect: false,
+      loading: false 
     }
   },
   methods: {
     onSubmit () {     
       var self = this;       
-      
+      var url = '';
+      this.loading = true;
+
       this.$http.post('/api/login',{        
           name: this.username,
           password: this.password        
       })
       .then(function (response) {        
-        // console.log(response.data[0]);
-        if(response.data[0])
+        // console.log(response.data[0]);        
+        if(response.data[0]){
           self.$router.push('/dashboard');
-        else {
+          self.loading = false;
+        }else {
           incorrect = true;
           self.password = '';
+          self.loading = false;
         }                              
       })
       .catch(function (error) {
+        self.loading = false;
         console.log(error);
       });
     },
