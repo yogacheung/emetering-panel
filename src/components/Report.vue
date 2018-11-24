@@ -40,6 +40,15 @@
                   <b-tab v-else-if="selected == 3" title="Day by Range" active>
                     <b-table hover :items="items"></b-table>            
                   </b-tab>
+                  <b-tab v-else-if="selected == 4" title="Month VNP Cut-Off" active>
+                    <b-table hover :items="items"></b-table>            
+                  </b-tab>
+                  <b-tab v-else-if="selected == 5" title="Day VNP" active>
+                    <b-table hover :items="items"></b-table>            
+                  </b-tab>
+                  <b-tab v-else-if="selected == 6" title="Day by Range VNP" active>
+                    <b-table hover :items="items"></b-table>            
+                  </b-tab>
                 </b-tabs>
               </b-card>                      
             </b-col>
@@ -52,12 +61,15 @@
 <script>
 import NavBar from './Navbar.vue';
 import Datepicker from 'vuejs-datepicker';
+import {LetterCube} from 'vue-loading-spinner';
+
 const now = new Date();
 
 export default {
   components: {
     NavBar,
-    Datepicker
+    Datepicker,
+    LetterCube
   },
   data () {
     return {
@@ -67,7 +79,10 @@ export default {
       options: [        
         {value: 1, text: 'Month | By Cut-Off Day'},
         {value: 2, text: 'Day | By Cut-Off Day'},
-        {value: 3, text: 'By Date Range'}        
+        {value: 3, text: 'By Date Range'},
+        {value: 4, text: 'Month VNP | By Cut-Off Day'},
+        {value: 5, text: 'Day VNP | By Cut-Off Day'},
+        {value: 6, text: 'By Date Range VNP'}        
       ],
       items: [{Result: 'No Record'}],
       cutoffDate: {
@@ -87,7 +102,12 @@ export default {
       // console.log(this.cutoffDate.date.toISOString().slice(0,10));
       var startDay = this.startDate.date.toISOString().slice(0,10);
       var cutoffDay = this.cutoffDate.date.toISOString().slice(0,10);        
+      
+      //*** Production ***
       var url = '/api/';
+      //*** Development ***
+      //var url = 'http://210.3.154.206:8880/api/'
+
       if(this.selected == 1) {
         var m = new Date(cutoffDay);
         m.setMonth(m.getMonth() - 1);
@@ -99,11 +119,26 @@ export default {
         url += 'onedayreport/'+cutoffDay;        
         this.showMonth = false;
         this.showDay = true;
-      }else {
+      }else if(this.selected == 3){
         url += 'rangereport/'+startDay+'/'+cutoffDay;
         this.showMonth = true;
         this.showDay = false;
-      }               
+      }else if(this.selected == 4) {
+        var m = new Date(cutoffDay);
+        m.setMonth(m.getMonth() - 1);
+        startDay = m.toISOString().slice(0,10);
+        url += 'onemonthvnpreport/'+startDay+'/'+cutoffDay;
+        this.showMonth = true;
+        this.showDay = false;
+      }else if(this.selected == 5) {
+        url += 'onedayvnpreport/'+cutoffDay;        
+        this.showMonth = false;
+        this.showDay = true;
+      }else if(this.selected == 6){
+        url += 'rangevnpreport/'+startDay+'/'+cutoffDay;
+        this.showMonth = true;
+        this.showDay = false;
+      }          
       // console.log(startDay); 
       // console.log(cutoffDay);          
       // console.log(url);

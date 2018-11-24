@@ -6,10 +6,10 @@
     </b-col>
   </b-row>
   <b-row>                
-        <b-card header="eMetering List" header-tag="header" footer="Powered by IFS @2018" footer-tag="footer">                      
-          <b-row v-if="loading">
-            <letter-cube></letter-cube>
-          </b-row>
+        <b-card header="eMetering List" header-tag="header" footer="Powered by IFS @2018" footer-tag="footer">                                
+          <div v-if="loading" style="height: 90%; text-align: center; padding: 20px;">
+            <letter-cube :size="150"></letter-cube>   
+          </div>          
           <b-row v-else>            
               <b-col cols="4" v-for="item in items" :key="item.index"> 
                 <div v-cloak class="dash">
@@ -30,8 +30,9 @@
 </template>
 
 <script>
-import NavBar from './Navbar.vue'
-import {LetterCube} from 'vue-loading-spinner'
+import NavBar from './Navbar.vue';
+import {LetterCube} from 'vue-loading-spinner';
+
 export default {
   name: 'dashboard',
   components: {  
@@ -40,7 +41,7 @@ export default {
   },
   data () {
     return {    
-      loading: false,    
+      loading: true,    
       items: [{"Unit":"loading","Reading":0.0,"Datetime":"loading"}]
     }
   },
@@ -51,6 +52,10 @@ export default {
     onLoad () {
       var self = this;    
       this.loading = true;
+
+      //*** Development ***
+      //this.$http.get('http://210.3.154.206:8880/api/currentreading')
+      //*** Production ***
       this.$http.get('/api/currentreading')
       .then(function (response) {        
         // console.log(response.data[0]);                
@@ -60,7 +65,7 @@ export default {
         }                    
       })
       .catch(function (error) {
-        self.loading = false;
+        self.loading = true;
         console.log(error);
       });
     },

@@ -41,7 +41,7 @@
                 <div>
                   <h2>Invisible Fun Studio</h2>
                   <p>eMetering user panel.</p>
-                  <b-button variant="primary" class="active mt-3" v-b-toggle.collapse2>Contact Us</b-button>
+                  <p><b-button variant="primary" class="active mt-3" v-b-toggle.collapse2>Contact Us</b-button></p>
                   <!-- element to collapse -->                  
                   <b-collapse id="collapse2">
                     <b-card bg-variant="dark">
@@ -49,10 +49,9 @@
                     </b-card>
                   </b-collapse>                               
                 </div>      
-                <b-row v-if="loading">
-                  <b-col cols="5"></b-col>
-                  <letter-cube></letter-cube>   
-                </b-row>          
+                <div v-if="loading" style="height: 120px; text-align: center; padding: 20px;">
+                  <letter-cube :size="80"></letter-cube>   
+                </div>
               </b-card-body>              
             </b-card>
           </b-card-group>
@@ -63,7 +62,8 @@
 </template>
 
 <script>
-import {LetterCube} from 'vue-loading-spinner'
+import {LetterCube} from 'vue-loading-spinner';
+
 export default {
   components: {
     LetterCube
@@ -79,10 +79,12 @@ export default {
   },
   methods: {
     onSubmit () {     
-      var self = this;       
-      var url = '';
+      var self = this;             
       this.loading = true;
 
+      //*** Development ***
+      //this.$http.post('http://210.3.154.206:8880/api/login', {
+      //*** Production ***
       this.$http.post('/api/login',{        
           name: this.username,
           password: this.password        

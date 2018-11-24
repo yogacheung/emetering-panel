@@ -50,6 +50,40 @@
             </div>
           </b-col>
         </b-row>
+        <!--
+        <b-row> 
+          <b-col cols="4">
+            <div class="bg1">          
+              <b-card text-variant="white" border-variant="secondary">
+                  <h4>Daily Valley</h4>
+                  <h3 class="text-center">  
+                    {{items.Minread}} kWh
+                  </h3>
+              </b-card>
+            </div>
+          </b-col>
+          <b-col cols="4">
+            <div class="bg3">          
+              <b-card text-variant="white" border-variant="secondary">
+                  <h4>Daily Normal</h4>
+                  <h3 class="text-center">  
+                    {{items.Maxread}} kWh
+                  </h3>
+              </b-card>
+            </div>
+          </b-col>
+          <b-col cols="4">
+            <div class="bg2">          
+              <b-card text-variant="white" border-variant="secondary">
+                  <h4>Daily Peak</h4>
+                  <h3 class="text-center">  
+                    {{items.Accum}} kWh
+                  </h3>
+              </b-card>
+            </div>
+          </b-col>
+        </b-row>
+        -->
         <b-row> 
           <b-col cols="4">  
             <b-card header="Last Month" class="text-center">
@@ -90,11 +124,11 @@
 </template>
 
 <script>
-import NavBar from './Navbar.vue'
-import LineChart from '@/charts/LineChart.js'
-import BarChart from '@/charts/BarChart.js'
-import HBarChart from '@/charts/HBarChart.js'
-import Doughnut from '@/charts/Doughnut.js'
+import NavBar from './Navbar.vue';
+import LineChart from '@/charts/LineChart.js';
+import BarChart from '@/charts/BarChart.js';
+import HBarChart from '@/charts/HBarChart.js';
+import Doughnut from '@/charts/Doughnut.js';
 
 export default {
   name: 'graph',
@@ -128,7 +162,10 @@ export default {
       this.punit = this.$router.currentRoute.query.unit;
       // console.log(this.punit);
 
-      this.$http.get('/api/unitinfo/'+this.punit)
+      //*** Development ***
+      this.$http.get('http://210.3.154.206:8880//api/unitinfo/'+this.punit)
+      //*** Production ***
+      //this.$http.get('/api/unitinfo/'+this.punit)
       .then(function (response) {        
         // console.log(response.data[0]);
         if(response.data[0])
@@ -138,7 +175,9 @@ export default {
         console.log(error);
       });
 
-      //this.$http.get('http://210.3.154.206:8880/api/lastmonth/10A01')
+      //*** Development ***
+      //this.$http.get('http://210.3.154.206:8880/api/lastmonth/'+this.punit)
+      //*** Production ***
       this.$http.get('/api/lastmonth/'+this.punit)      
       .then(function (response) {        
         // console.log(response.data[0]);
